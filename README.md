@@ -6,7 +6,11 @@ A deployment repository should contain all relevant Kubernetes deployment inform
 It should also contain all cloud specific configuration, preferably through the use of ConfigMaps.
 
 # Sensitive information
-Sensitive data should be handled through Sealed Secrets. Follow the steps provided in https://github.com/bitnami-labs/sealed-secrets#usage to generate a plain Kubernetes secret locally. By using the foo-secret.json format, the plain secret will automatically be ignored by git. Convert the secret to a Sealed Secret for each environment (generally staging and production), using the naming scheme foo-sealedsecret.json. Take care to keep track of the sensitive data out-of-band, as you can't retrieve the original values from the sealed secret without Kubernetes access!
+Sensitive data should be handled through Sealed Secrets. Follow the steps provided in https://github.com/bitnami-labs/sealed-secrets#usage to generate a plain Kubernetes secret locally. By using the foo-secret.json format and this template, the plain secret will automatically be ignored by git. 
+
+Convert the secret to a Sealed Secret for each environment (generally staging and production), using the naming scheme foo-sealedsecret.json. 
+
+> Take care to keep track of the sensitive data out-of-band, as you can't retrieve the original values from the sealed secret without Kubernetes access! In case anything goes wrong with the Kubernetes cluster or the Sealed Secrets controller, your data might be lost!
 
 # Kustomize layout
 Use the `base` folder to define everything that is shared between environments.
