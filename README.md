@@ -9,6 +9,7 @@ It should also contain all cloud specific configuration, preferably through the 
 Sensitive data should be handled through Sealed Secrets. Follow the steps provided in https://github.com/bitnami-labs/sealed-secrets#usage to generate a plain Kubernetes secret locally. By using the foo-secret.json format and this template, the plain secret will automatically be ignored by git. 
 
 Convert the secret to a Sealed Secret for each environment (generally staging and production), using the naming scheme foo-sealedsecret.json. 
+You might have to remove the empty `status` field from the generated manifests, as an empty field in the manifest combined with an 'omitempty' trait in the resource definition might result in the GitOps engine seeing the object as out-of-sync.
 
 > Take care to keep track of the sensitive data out-of-band, as you can't retrieve the original values from the sealed secret without Kubernetes access! In case anything goes wrong with the Kubernetes cluster or the Sealed Secrets controller, your data might be lost!
 
