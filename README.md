@@ -42,6 +42,16 @@ overlays
 |-- production
 ```
 
+## Patches
+When using overlays, you might want to overwrite fields set by your base directory. This can be done through the use of patch files. Kustomize supports 3 types of patches:
+
+* patchesStrategicMerge: A list of patch files where each file is parsed as a Strategic Merge Patch.
+* patchesJSON6902: A list of patches and associated targetes, where each file is parsed as a JSON Patch and can only be applied to one target resource.
+* patches: A list of patches and their associated targets. The patch can be applied to multiple objects. It auto detects whether the patch is a Strategic Merge Patch or JSON Patch.
+> taken from https://github.com/kubernetes-sigs/kustomize/blob/master/examples/inlinePatch.md, see link for inline examples for each patch type
+
+In our case, we rely mostly on patchesStrategicMerge and a separate patch file. By using these patches, our CICD pipeline can automatically update image tags according to their environment. See our deployment info on confluence for more information on how the source repo can be configured to trigger automatic updates in the deployment repo.
+
 ## Labels
 When using 'commonLabels', take into account that the labels are applied per kustomization file. If you have a base file that defines a deployment, the common labels from that base kustomization file will be applied to the deployment. If an overlay adds a new service, the common labels of that overlay kustomization file will be added to the service. The service won't have the common labels of the base kustomization file, nor will the deployment have the common labels of the overlay.
 
