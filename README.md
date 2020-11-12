@@ -44,6 +44,7 @@ overlays
 When using 'commonLabels', take into account that the labels are applied per kustomization file. If you have a base file that defines a deployment, the common labels from that base kustomization file will be applied to the deployment. If an overlay adds a new service, the common labels of that overlay kustomization file will be added to the service. The service won't have the common labels of the base kustomization file, nor will the deployment have the common labels of the overlay.
 
 ## ConfigMaps
+### Generator types
 While one can add plain ConfigMap manifests to the kustomization resources, kustomize provides ConfigMapGenerators to automatically generate ConfigMaps from other files. There are a couple of different options to generate ConfigMaps from files, they are:
 * literals: literal key=value pairs
 * envs: each line in the given files should be in the form of key=value
@@ -64,9 +65,32 @@ configMapGenerator:
   - foo3.env
 ```
 
+### Generator options
 By default, kustomize generators add a hash to the name of their generated resource, to prevent overwriting existing resources. We generally don't use this functionality, it can be disabled by adding 
 ```
 generatorOptions:
   disableNameSuffixHash: true
 ```
 If you do want to use this functionality, know that kustomize will automatically replace any reference to the generated resource within the defined manifests with the hash-suffixed name.
+
+### Merge behaviour
+It is possible to set what action to take upon generating a new ConfigMap or Secret, the options are:
+* create: attempt to create a new object, throw an error if it already exists
+* merge: merge with existing object, throw an error if there is no existing object
+* replace: overwrite an existing object, throw an error if there is no existing object
+
+To set what behavior to use, simply add the corresponding type to your generator:
+```
+configMapGenerator:
+- name: config-map
+  behavior: merge
+  [...]
+```
+
+Our general modus operandi is to define any configuration shared between environments in one or more configuration files in the base directory. Any environmnet specific configuration can then be configured in specific overlays. By defining ConfigMapGenerators in both the base kustomization file as well as in the overlay kustomization file and setting the merge behaviour of the overlay ConfigMapGenerators to merge, one can combine base and overlay configuration in the same ConfigMap(s).
+
+# Using data from other repositories
+In some specific cases, one might want to use configuration parameters defined in another repository, e.g. shared database connection information.
+In such cases, it is advised to disable any pre- and suffix generation, as well as hash generation, for those shared resources, as kustomize will only update named references in the manifests defined through its kustomization file.
+
+If no custom affixes are added to the resource, one can simply refer to an existing ConfigMap or Secret by name. 
