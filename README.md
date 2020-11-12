@@ -11,7 +11,9 @@ Sensitive data should be handled through Sealed Secrets. Follow the steps provid
 Convert the secret to a Sealed Secret for each environment (generally staging and production), using the naming scheme foo-sealedsecret.json. 
 You might have to remove the empty `status` field from the generated manifests, as an empty field in the manifest combined with an 'omitempty' trait in the resource definition might result in the GitOps engine seeing the object as out-of-sync.
 
-> Take care to keep track of the sensitive data out-of-band, as you can't retrieve the original values from the sealed secret without Kubernetes access! In case anything goes wrong with the Kubernetes cluster or the Sealed Secrets controller, your data might be lost!
+---
+Keep a copy of sensitive data out-of-band! In case anything goes wrong with the Kubernetes cluster or the Sealed Secrets controller, your data might be lost!
+---
 
 > Usage of sealed secrets requires you to have a valid kube config file locally. You might not have the correct access rights to create sealed secrets. If this is the case, please contact the cluster administrators.
 
