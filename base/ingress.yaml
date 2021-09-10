@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {PLACEHOLDER}
+  annotations:
+    kubernetes.io/ingress.class: traefik-v2
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: {PLACEHOLDER} # Adjust according to path prefix e.g. traefik-v2-stripprefix-1level@kubernetescrd strips the first level from the path
+spec:
+  rules:
+    - http:
+        paths:
+          - path: {PLACEHOLDER} # e.g. /my-subservice
+            backend:
+              service:
+                name: {PLACEHOLDER}
+                port:
+                  name: {PLACEHOLDER} # e.g. http
+            pathType: Prefix # Prefix, Exact or ImplementationSpecific

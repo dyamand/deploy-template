@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {PLACEHOLDER}
+spec:
+  replicas: 0
+  template:          
+    spec:
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        runAsNonRoot: true
+      containers:
+        - name: {PLACEHOLDER}
+          image: {PLACEHOLDER}
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+          resources:
+            requests:
+              memory: {PLACEHOLDER} # e.g. "150Mi"
+            limits:
+              memory: {PLACEHOLDER} # e.g. "150Mi"
+          ports:
+            - name: {PLACEHOLDER} # e.g. http
+              containerPort: {PLACEHOLDER} # e.g. 8080

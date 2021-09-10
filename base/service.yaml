@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {PLACEHOLDER}
+spec:
+  ports:
+    - port: {PLACEHOLDER} # e.g. 8080
+      targetPort: {PLACEHOLDER} # e.g. http or 8080
+      protocol: TCP
+      name: {PLACEHOLDER} # e.g. http
+  type: ClusterIP
